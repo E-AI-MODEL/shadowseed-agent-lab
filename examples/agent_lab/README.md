@@ -15,7 +15,7 @@ The first examples should stay deterministic:
 multi_domain_absence_demo.py
 fixtures/
   project_plan.md
-  compliance_note.md
+  policy_note.md
   incident_review.md
   product_requirements.md
   research_critique.md
@@ -41,12 +41,12 @@ seed_detected: owner_missing
 seed_weight: 0.0
 gate: blocked
 probe: none
-audit: passed
+audit: blocked_weightless_seed
 
 fixture: incident_review.md
 seed_detected: mitigation_owner_missing
 seed_weight: 0.6
 gate: promoted
 probe: ask_for_mitigation_owner
-audit: passed
+audit: allowed_promoted_gate_logged
 ```
