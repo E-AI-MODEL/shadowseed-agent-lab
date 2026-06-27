@@ -1,0 +1,5 @@
+interface:
+  display_name: Shadowseed Agent Lab
+  short_description: Review and extend the Shadowseed agent lab while preserving upstream SSL boundaries.
+  icon: seedling
+  accent_color: '#4B7F52'
