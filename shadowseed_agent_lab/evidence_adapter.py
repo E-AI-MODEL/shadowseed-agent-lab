@@ -1,8 +1,16 @@
 """Input-driven evidence adapter for the Shadow Seed agent lab.
 
+Upstream `E-AI-MODEL/shadowseed` owns the SSL core: seed lifecycle,
+trace/weight separation, Validation Gate behavior, contradiction handling, and
+promotion semantics.
+
+This lab adapter does not fetch that logic dynamically and does not redefine it.
+It sits before the upstream Validation Gate and prepares candidate evidence refs
+from input/context.
+
 The adapter deliberately does not accept a seed object as the lookup driver.
 It accepts an input/candidate-evidence request and returns evidence references
-that a later Validation Gate step may evaluate.
+that a later upstream-compatible Validation Gate step may evaluate.
 """
 
 from __future__ import annotations
@@ -35,7 +43,12 @@ class CandidateEvidenceRequest:
 
 @dataclass(frozen=True)
 class EvidenceRef:
-    """Reference to candidate evidence returned by an adapter."""
+    """Reference to candidate evidence returned by an adapter.
+
+    `EvidenceRef` mirrors the evidence-discipline boundary used by upstream SSL:
+    generated output is not verified evidence, and verification is separate from
+    seed promotion.
+    """
 
     id: str
     source: str
