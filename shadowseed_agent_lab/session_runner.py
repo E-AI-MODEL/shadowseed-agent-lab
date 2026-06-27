@@ -104,8 +104,12 @@ class AgentSessionRunner:
         self._evidence_lookup = evidence_lookup
 
     def run(self, request: SessionRequest) -> SessionResult:
+        seed_id = _normalize(request.candidate_absence)
+        if not seed_id:
+            raise ValueError("candidate_absence must not be empty")
+
         seed = SessionSeed(
-            id=_normalize(request.candidate_absence),
+            id=seed_id,
             trace=1.0,
             weight=0.0,
             status=NEW_STATUS,
@@ -189,9 +193,11 @@ def _decide_probe(seed: SessionSeed, gate_event: GateEvent) -> SessionDecision:
 
 
 def _evidence_supports_seed(ref: EvidenceRef, seed_id: str) -> bool:
+    if not seed_id:
+        return False
     supported = _normalize(ref.supports_seed or "")
     ref_text = _normalize(ref.text)
-    return bool(supported == seed_id or seed_id in ref_text)
+    return bool((supported and supported == seed_id) or seed_id in ref_text)
 
 
 def _normalize(value: str) -> str:
