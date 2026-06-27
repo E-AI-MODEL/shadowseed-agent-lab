@@ -26,22 +26,28 @@ Done when:
 - upstream relationship is documented;
 - safety rules are visible.
 
-## Phase 1: Fixture-Driven School Notes Demo
+## Phase 1: Fixture-Driven Multi-Domain Absence Demo
 
-Purpose: create a deterministic demo before introducing live models or live tools.
+Purpose: create deterministic demos before introducing live models or live tools.
 
-Input examples:
+Input examples should span multiple domains so SSL is tested as a general absence-detection and gate-controlled influence layer, not as a school-specific workflow.
 
-- meeting notes;
-- policy action points;
-- incomplete task lists;
-- school-process notes.
+Fixture domains:
+
+- project planning notes;
+- policy or compliance notes;
+- incident review notes;
+- product requirements;
+- research critique;
+- optional education/school notes as one domain example.
 
 Expected output:
 
 - seed candidates;
+- seed starts weightless;
+- evidence is checked separately;
 - gate blocked or promoted state;
-- suggested follow-up probe;
+- suggested follow-up probe only when promoted;
 - audit log result.
 
 ## Phase 2: Minimal RAG Evidence Adapter
