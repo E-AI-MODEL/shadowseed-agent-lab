@@ -13,6 +13,13 @@ class SessionRunnerGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runner.run(SessionRequest("case", "input text", candidate))
 
+    def test_candidate_text_must_have_content(self) -> None:
+        runner = AgentSessionRunner(FixtureEvidenceAdapter([]))
+        candidate = chr(32) * 3
+
+        with self.assertRaises(ValueError):
+            runner.run(SessionRequest("case", "input text", candidate))
+
 
 if __name__ == "__main__":
     unittest.main()
