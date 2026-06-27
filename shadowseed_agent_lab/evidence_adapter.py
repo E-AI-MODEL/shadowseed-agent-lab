@@ -104,9 +104,7 @@ class FixtureEvidenceAdapter:
         matches: list[EvidenceRef] = []
 
         for ref in self._evidence_refs:
-            supported = _normalize(ref.supports_seed or "")
-            ref_text = _normalize(ref.text)
-            if supported == absence or absence in ref_text or supported in input_text:
+            if _matches_request(ref, absence, input_text):
                 matches.append(ref)
 
         return matches
@@ -122,6 +120,15 @@ def load_fixture_adapter(path: str | Path) -> FixtureEvidenceAdapter:
     """Load the fixture-backed adapter from a JSON corpus path."""
 
     return FixtureEvidenceAdapter.from_json_file(path)
+
+
+def _matches_request(ref: EvidenceRef, absence: str, input_text: str) -> bool:
+    supported = _normalize(ref.supports_seed or "")
+    ref_text = _normalize(ref.text)
+
+    if supported and (supported == absence or supported in input_text):
+        return True
+    return bool(absence and absence in ref_text)
 
 
 def _normalize(value: str) -> str:
