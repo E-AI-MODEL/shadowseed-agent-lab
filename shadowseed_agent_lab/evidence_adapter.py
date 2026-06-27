@@ -83,6 +83,9 @@ class FixtureEvidenceAdapter:
         not accept a seed object and it never assigns seed weight or status.
         """
 
+        if not isinstance(request, CandidateEvidenceRequest):
+            raise TypeError("lookup requires CandidateEvidenceRequest, not a seed object")
+
         absence = _normalize(request.candidate_absence)
         input_text = _normalize(request.input_text)
         matches: list[EvidenceRef] = []
