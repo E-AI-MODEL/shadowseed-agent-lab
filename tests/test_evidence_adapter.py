@@ -81,10 +81,64 @@ class EvidenceAdapterTests(unittest.TestCase):
         self.assertTrue(raw)
         self.assertEqual(verified, [])
 
+    def test_unlabeled_verified_evidence_does_not_match_every_request(self) -> None:
+        adapter = FixtureEvidenceAdapter(
+            [
+                EvidenceRef(
+                    id="unlabeled-verified",
+                    source="notes.md#general",
+                    kind="fixture_note",
+                    text="This verified note is unrelated to the requested absence.",
+                    verified=True,
+                    supports_seed=None,
+                ),
+                EvidenceRef(
+                    id="owner-evidence",
+                    source="project_plan.md#owners",
+                    kind="fixture_note",
+                    text="Action points require a named owner.",
+                    verified=True,
+                    supports_seed="owner_missing",
+                ),
+            ]
+        )
+        request = CandidateEvidenceRequest(
+            input_id="input-5",
+            input_text="The project plan has an action point but no owner.",
+            candidate_absence="owner_missing",
+        )
+
+        raw = adapter.lookup(request)
+        verified = filter_verified_evidence(raw)
+
+        self.assertEqual([ref.id for ref in raw], ["owner-evidence"])
+        self.assertEqual([ref.id for ref in verified], ["owner-evidence"])
+
+    def test_unlabeled_evidence_can_match_requested_absence_text(self) -> None:
+        adapter = FixtureEvidenceAdapter(
+            [
+                EvidenceRef(
+                    id="text-matched",
+                    source="research.md#criteria",
+                    kind="fixture_note",
+                    text="The evaluation_criterion_missing gap is documented in this note.",
+                    verified=True,
+                    supports_seed=None,
+                )
+            ]
+        )
+        request = CandidateEvidenceRequest(
+            input_id="input-6",
+            input_text="The research note lacks a criterion.",
+            candidate_absence="evaluation_criterion_missing",
+        )
+
+        self.assertEqual([ref.id for ref in adapter.lookup(request)], ["text-matched"])
+
     def test_adapter_does_not_assign_weight_or_promote(self) -> None:
         adapter = load_fixture_adapter(CORPUS)
         request = CandidateEvidenceRequest(
-            input_id="input-5",
+            input_id="input-7",
             input_text="The action point has no owner.",
             candidate_absence="owner_missing",
         )
