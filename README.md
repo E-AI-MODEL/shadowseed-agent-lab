@@ -68,6 +68,8 @@ Reusable lab review workflow files:
 - [`skills/shadowseed-agent-lab/references/upstream-contract.md`](skills/shadowseed-agent-lab/references/upstream-contract.md)
 - [`skills/shadowseed-agent-lab/references/review-checklist.md`](skills/shadowseed-agent-lab/references/review-checklist.md)
 
+`skills/shadowseed-agent-lab/agents/openai.yaml` is OpenAI UI metadata only. The lab workflow and Skill instructions are not OpenAI-only.
+
 ## Test gate
 
 Before merging lab behavior changes, run:
