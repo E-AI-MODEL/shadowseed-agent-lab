@@ -35,6 +35,17 @@ Start here before adding new behavior:
 - [`docs/architecture-decisions/README.md`](docs/architecture-decisions/README.md)
 - [`docs/architecture-decisions/0001-agent-lab-boundary.md`](docs/architecture-decisions/0001-agent-lab-boundary.md)
 - [`docs/architecture-decisions/0002-rag-as-evidence-not-influence.md`](docs/architecture-decisions/0002-rag-as-evidence-not-influence.md)
+- [`docs/pr-safety-checklist.md`](docs/pr-safety-checklist.md)
+
+## Test gate
+
+Before merging lab behavior changes, run:
+
+```bash
+python -m unittest discover -s tests
+```
+
+Record the result in the PR body or review comment.
 
 ## Initial lab path
 
