@@ -3,7 +3,7 @@
 Experimental agent/RAG integration lab for Shadow Seed Learning.
 
 This repository explores how SSL seeds can safely interact with retrieval,
-probes, warnings, and agent suggestions.
+probes, warnings, and agent suggestions across multiple domains.
 
 It is not a production agent.
 
@@ -33,11 +33,22 @@ weight = 0 means the seed does not steer
 
 Planned first layers:
 
-1. fixture-driven school-notes demo;
+1. fixture-driven multi-domain absence demo;
 2. minimal RAG evidence adapter;
 3. agent session runner;
 4. audit replay for seed-driven decisions;
 5. suggest-only external-action boundary.
+
+## Fixture domains
+
+The first fixture set should include several domains so SSL is not framed as school-specific:
+
+- project planning;
+- policy or compliance notes;
+- incident review;
+- product requirements;
+- research critique;
+- optional education/school notes as one example, not the core scope.
 
 ## Non-goals
 
