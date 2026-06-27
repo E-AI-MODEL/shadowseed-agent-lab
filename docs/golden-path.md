@@ -47,20 +47,24 @@ A seed with `weight <= 0` must not trigger retrieval, modify answer text, produc
 
 ## Happy path
 
+Evidence lookup is triggered by the input workflow, not by the weightless seed.
+
 ```text
 input
   -> detect candidate absence
   -> create or observe seed
   -> seed starts weightless
   -> log seed presence
-  -> retrieve possible evidence
+  -> input workflow requests candidate-evidence lookup
   -> verify evidence separately
-  -> run Validation Gate
+  -> run Validation Gate with seed + verified evidence refs
   -> if blocked: no probe, no retrieval steering, no action
   -> if promoted: allow bounded probe suggestion
   -> log every decision
   -> audit replay must pass
 ```
+
+The weightless seed may be passed to the gate as an object under evaluation. It may not itself cause retrieval, steer the query, or change the answer path.
 
 ## Gate path
 
@@ -81,7 +85,8 @@ RAG is an evidence provider, not an influence authority.
 Allowed:
 
 ```text
-seed candidate -> evidence lookup -> evidence refs -> Validation Gate
+input/context -> candidate-evidence lookup -> evidence refs -> Validation Gate
+seed candidate -> weightless seed -> Validation Gate
 ```
 
 Not allowed:
@@ -90,7 +95,7 @@ Not allowed:
 weightless seed -> retrieval steering -> answer change
 ```
 
-RAG may supply candidate evidence. RAG may not assign weight, promote seeds, or bypass the Validation Gate.
+RAG may supply candidate evidence from the input context. RAG may not assign weight, promote seeds, bypass the Validation Gate, or use a weightless seed as the retrieval driver.
 
 ## Probe path
 
