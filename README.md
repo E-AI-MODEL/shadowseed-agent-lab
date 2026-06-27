@@ -11,25 +11,34 @@ It is not a production agent.
 
 - A seed with `weight <= 0` must not trigger retrieval.
 - A seed with `weight <= 0` must not change answer text.
-- A seed with `weight <= 0` must not trigger external actions.
+- A seed with `weight <= 0` must not trigger downstream behavior.
 - LLM output is not verified evidence.
 - Only `PROMOTED` seeds with a logged Validation Gate event may trigger probes.
-- External action execution is out of scope until suggest-only mode is audited.
+- Downstream execution is out of scope until suggest-only mode is audited.
 
-## Relationship to upstream
+## Upstream contract
 
-Upstream `E-AI-MODEL/shadowseed` contains the SSL core, benchmarks, and evidence discipline.
+Upstream `E-AI-MODEL/shadowseed` contains the SSL core, benchmarks, evidence discipline, and reusable `shadowseed_agent` safety helpers.
 
-This lab contains experimental agent/RAG integration work.
-
-## Initial lab path
-
-The first goal is not an autonomous agent. The first goal is a safe sandbox that can prove this invariant:
+This lab does not redefine SSL. It builds agent/RAG experiments around the upstream contract:
 
 ```text
 trace > 0 means the seed is present
 weight = 0 means the seed does not steer
 ```
+
+## Golden path and architecture decisions
+
+Start here before adding new behavior:
+
+- [`docs/golden-path.md`](docs/golden-path.md)
+- [`docs/architecture-decisions/README.md`](docs/architecture-decisions/README.md)
+- [`docs/architecture-decisions/0001-agent-lab-boundary.md`](docs/architecture-decisions/0001-agent-lab-boundary.md)
+- [`docs/architecture-decisions/0002-rag-as-evidence-not-influence.md`](docs/architecture-decisions/0002-rag-as-evidence-not-influence.md)
+
+## Initial lab path
+
+The first goal is not an autonomous agent. The first goal is a safe sandbox that can prove the upstream invariant across agent/RAG boundaries.
 
 Planned first layers:
 
@@ -37,7 +46,7 @@ Planned first layers:
 2. minimal RAG evidence adapter;
 3. agent session runner;
 4. audit replay for seed-driven decisions;
-5. suggest-only external-action boundary.
+5. suggest-only downstream boundary.
 
 ## Fixture domains
 
@@ -54,7 +63,7 @@ The first fixture set should include several domains so SSL is not framed as sch
 
 This repository does not yet:
 
-- execute external actions;
+- execute downstream behavior;
 - update external systems;
 - run autonomous workflows;
 - claim production readiness.
