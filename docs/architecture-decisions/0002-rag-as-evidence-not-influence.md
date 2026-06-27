@@ -6,7 +6,7 @@ Accepted.
 
 ## Context
 
-The lab will add RAG-style retrieval experiments. Without a clear boundary, retrieval could accidentally become a second promotion path for seeds.
+The lab will add RAG-style evidence lookup experiments. Without a clear boundary, lookup could accidentally become a second route for giving seeds influence.
 
 That would violate the upstream SSL rule that weight is influence and that weight may rise only through validation.
 
@@ -16,7 +16,7 @@ RAG is an evidence provider, not an influence authority.
 
 RAG may:
 
-- retrieve candidate evidence;
+- look up candidate evidence from the input or candidate-evidence workflow;
 - attach evidence references;
 - mark evidence as verified or unverified through an adapter;
 - pass evidence references to the Validation Gate.
@@ -25,28 +25,35 @@ RAG may not:
 
 - assign seed weight;
 - promote a seed;
-- bypass the Validation Gate;
-- let a weightless seed steer retrieval or answer text.
+- replace the Validation Gate;
+- use a weightless seed as the driver for lookup or answer flow.
 
 ## Golden path
 
+Evidence lookup is input-driven, not seed-driven.
+
 ```text
+input/context
+  -> candidate-evidence lookup
+  -> verified evidence refs
+
 seed candidate
   -> weightless seed
-  -> evidence lookup
-  -> verified evidence refs
+
+weightless seed + verified evidence refs
   -> Validation Gate
-  -> promoted seed
-  -> bounded probe suggestion
+  -> promoted seed or blocked seed
   -> decision log
 ```
+
+Only a promoted, gate-logged seed may later support a bounded probe suggestion.
 
 ## Blocked path
 
 ```text
 weightless seed
-  -> retrieval steering
-  -> answer change
+  -> lookup driver
+  -> answer flow change
 ```
 
 ## Consequences
