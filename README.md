@@ -7,6 +7,28 @@ probes, warnings, and agent suggestions across multiple domains.
 
 It is not a production agent.
 
+## Foundation status
+
+The first agent-lab foundation is complete as a research/prototype harness.
+
+Implemented layers:
+
+1. fixture-driven multi-domain absence demo;
+2. minimal input-driven evidence adapter;
+3. bounded session runner;
+4. fixture-only gate-policy seam;
+5. PR safety checklist and local test gate;
+6. audit replay for seed-driven decisions;
+7. reviewer profile and Skill foundation.
+
+Candidate release tag for the foundation snapshot:
+
+```text
+v0.1.0-ssl-agent-lab-foundation
+```
+
+No release tag is created by this README update.
+
 ## Safety boundary
 
 - A seed with `weight <= 0` must not trigger retrieval.
@@ -37,6 +59,15 @@ Start here before adding new behavior:
 - [`docs/architecture-decisions/0002-rag-as-evidence-not-influence.md`](docs/architecture-decisions/0002-rag-as-evidence-not-influence.md)
 - [`docs/pr-safety-checklist.md`](docs/pr-safety-checklist.md)
 
+## Agent and Skill layer
+
+Reusable lab review workflow files:
+
+- [`agents/shadowseed-agent-lab-reviewer.md`](agents/shadowseed-agent-lab-reviewer.md)
+- [`skills/shadowseed-agent-lab/SKILL.md`](skills/shadowseed-agent-lab/SKILL.md)
+- [`skills/shadowseed-agent-lab/references/upstream-contract.md`](skills/shadowseed-agent-lab/references/upstream-contract.md)
+- [`skills/shadowseed-agent-lab/references/review-checklist.md`](skills/shadowseed-agent-lab/references/review-checklist.md)
+
 ## Test gate
 
 Before merging lab behavior changes, run:
@@ -46,18 +77,6 @@ python -m unittest discover -s tests
 ```
 
 Record the result in the PR body or review comment.
-
-## Initial lab path
-
-The first goal is not an autonomous agent. The first goal is a safe sandbox that can prove the upstream invariant across agent/RAG boundaries.
-
-Planned first layers:
-
-1. fixture-driven multi-domain absence demo;
-2. minimal RAG evidence adapter;
-3. agent session runner;
-4. audit replay for seed-driven decisions;
-5. suggest-only downstream boundary.
 
 ## Fixture domains
 
