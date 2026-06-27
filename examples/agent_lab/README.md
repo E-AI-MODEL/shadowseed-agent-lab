@@ -12,11 +12,17 @@ The first examples should stay deterministic:
 ## Planned demo
 
 ```text
-school_notes_demo.py
+multi_domain_absence_demo.py
 fixtures/
-  meeting_notes.md
-  policy_action_points.md
+  project_plan.md
+  compliance_note.md
+  incident_review.md
+  product_requirements.md
+  research_critique.md
+  education_note.md
 ```
+
+Education or school notes may be included as one fixture domain, but SSL is not school-specific. The lab should test domain-general absence detection and gate-controlled influence.
 
 The demo should show:
 
@@ -30,15 +36,17 @@ The demo should show:
 ## Expected console shape
 
 ```text
+fixture: project_plan.md
 seed_detected: owner_missing
 seed_weight: 0.0
 gate: blocked
 probe: none
 audit: passed
 
-seed_detected: deadline_missing
+fixture: incident_review.md
+seed_detected: mitigation_owner_missing
 seed_weight: 0.6
 gate: promoted
-probe: ask_for_deadline
+probe: ask_for_mitigation_owner
 audit: passed
 ```
