@@ -1,16 +1,11 @@
 """Bounded session runner for the Shadow Seed agent lab.
 
-The runner wires together the first lab loop:
+This module wires input/context to a weightless seed record, input-driven
+evidence lookup, a gate-policy seam, a promoted-only probe suggestion, and a
+decision log.
 
-input/context
-  -> candidate absence
-  -> weightless seed record
-  -> input-driven evidence lookup
-  -> minimal gate decision
-  -> promoted-only probe suggestion
-  -> decision log
-
-It is suggestion-only. A weightless seed cannot drive lookup or probes.
+The default gate policy is fixture-only. The source repo `shadowseed` remains the
+owner of SSL meanings such as lifecycle, promotion, and trace/weight behavior.
 """
 
 from __future__ import annotations
@@ -28,6 +23,7 @@ NEW_STATUS = "NEW"
 PROMOTED_STATUS = "PROMOTED"
 BLOCKED_STATUS = "BLOCKED"
 PROMOTED_WEIGHT = 0.6
+FIXTURE_GATE_POLICY = "fixture_gate_policy"
 
 
 class EvidenceLookup(Protocol):
@@ -35,6 +31,13 @@ class EvidenceLookup(Protocol):
 
     def lookup(self, request: CandidateEvidenceRequest) -> list[EvidenceRef]:
         """Return candidate evidence for an input-driven request."""
+
+
+class GatePolicy(Protocol):
+    """Policy seam for gate decisions in lab sessions."""
+
+    def decide(self, seed: "SessionSeed", verified_refs: tuple[EvidenceRef, ...]) -> "GateEvent":
+        """Return a gate event for one seed under evaluation."""
 
 
 @dataclass(frozen=True)
@@ -60,6 +63,7 @@ class GateEvent:
     weight_after: float
     evidence_ids: tuple[str, ...]
     reason: str
+    policy: str
 
 
 @dataclass(frozen=True)
@@ -91,17 +95,43 @@ class SessionResult:
     decisions: tuple[SessionDecision, ...]
 
 
+class FixtureGatePolicy:
+    """Deterministic fixture-only policy for lab tests."""
+
+    name = FIXTURE_GATE_POLICY
+
+    def decide(self, seed: SessionSeed, verified_refs: tuple[EvidenceRef, ...]) -> GateEvent:
+        supporting_refs = tuple(
+            ref for ref in verified_refs if _evidence_supports_seed(ref, seed.id)
+        )
+        if not supporting_refs:
+            return GateEvent(
+                seed_id=seed.id,
+                promoted=False,
+                status_after=BLOCKED_STATUS,
+                weight_after=0.0,
+                evidence_ids=(),
+                reason="missing_verified_support",
+                policy=self.name,
+            )
+
+        return GateEvent(
+            seed_id=seed.id,
+            promoted=True,
+            status_after=PROMOTED_STATUS,
+            weight_after=PROMOTED_WEIGHT,
+            evidence_ids=tuple(ref.id for ref in supporting_refs),
+            reason="fixture_verified_support",
+            policy=self.name,
+        )
+
+
 class AgentSessionRunner:
-    """Small deterministic observe-to-probe runner.
+    """Small deterministic observe-to-probe runner."""
 
-    The runner is intentionally narrow. It prepares a seed record and evaluates
-    evidence, but it does not replace upstream SSL. The minimal gate here exists
-    only to make lab sessions deterministic until a stronger upstream-compatible
-    gate adapter is introduced.
-    """
-
-    def __init__(self, evidence_lookup: EvidenceLookup):
+    def __init__(self, evidence_lookup: EvidenceLookup, gate_policy: GatePolicy | None = None):
         self._evidence_lookup = evidence_lookup
+        self._gate_policy = gate_policy or FixtureGatePolicy()
 
     def run(self, request: SessionRequest) -> SessionResult:
         seed_id = _normalize(request.candidate_absence)
@@ -123,7 +153,7 @@ class AgentSessionRunner:
         evidence_refs = tuple(self._evidence_lookup.lookup(evidence_request))
         verified_refs = tuple(filter_verified_evidence(evidence_refs))
 
-        gate_event = _run_minimal_gate(seed, verified_refs)
+        gate_event = self._gate_policy.decide(seed, verified_refs)
         seed_after_gate = SessionSeed(
             id=seed.id,
             trace=seed.trace,
@@ -150,30 +180,6 @@ class AgentSessionRunner:
             probe_suggestion=probe,
             decisions=(probe_decision,),
         )
-
-
-def _run_minimal_gate(seed: SessionSeed, verified_refs: tuple[EvidenceRef, ...]) -> GateEvent:
-    supporting_refs = tuple(
-        ref for ref in verified_refs if _evidence_supports_seed(ref, seed.id)
-    )
-    if not supporting_refs:
-        return GateEvent(
-            seed_id=seed.id,
-            promoted=False,
-            status_after=BLOCKED_STATUS,
-            weight_after=0.0,
-            evidence_ids=(),
-            reason="missing_verified_support",
-        )
-
-    return GateEvent(
-        seed_id=seed.id,
-        promoted=True,
-        status_after=PROMOTED_STATUS,
-        weight_after=PROMOTED_WEIGHT,
-        evidence_ids=tuple(ref.id for ref in supporting_refs),
-        reason="verified_support",
-    )
 
 
 def _decide_probe(seed: SessionSeed, gate_event: GateEvent) -> SessionDecision:
