@@ -47,7 +47,7 @@ DOMAIN_RULES: dict[str, tuple[Rule, ...]] = {
         Rule("deadline_missing", ("deadline:",), "ask_for_deadline"),
         Rule("decision_status_missing", ("status:",), "ask_for_decision_status"),
     ),
-    "compliance_note.md": (
+    "policy_note.md": (
         Rule("policy_exception_missing", ("exception:",), "ask_for_policy_exception"),
         Rule("evidence_reference_missing", ("evidence:",), "ask_for_evidence_reference"),
     ),
