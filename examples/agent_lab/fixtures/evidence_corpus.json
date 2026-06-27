@@ -1,0 +1,42 @@
+[
+  {
+    "id": "evidence-deadline-001",
+    "source": "project_plan.md#action-points",
+    "kind": "fixture_note",
+    "text": "Action points require an explicit deadline before follow-up can be tracked.",
+    "verified": true,
+    "supports_seed": "deadline_missing"
+  },
+  {
+    "id": "evidence-owner-001",
+    "source": "project_plan.md#action-points",
+    "kind": "fixture_note",
+    "text": "Action points require a named owner before assignment can be checked.",
+    "verified": true,
+    "supports_seed": "owner_missing"
+  },
+  {
+    "id": "evidence-evaluation-001",
+    "source": "research_critique.md#methods",
+    "kind": "fixture_note",
+    "text": "Research comparisons need an explicit evaluation criterion for borderline cases.",
+    "verified": true,
+    "supports_seed": "evaluation_criterion_missing"
+  },
+  {
+    "id": "evidence-deadline-draft-001",
+    "source": "draft_output.md#generated",
+    "kind": "llm_output",
+    "text": "The draft suggests that a deadline might be useful here.",
+    "verified": true,
+    "supports_seed": "deadline_missing"
+  },
+  {
+    "id": "evidence-policy-unverified-001",
+    "source": "policy_note.md#draft",
+    "kind": "fixture_note",
+    "text": "The note may need an exception field, but this has not been reviewed.",
+    "verified": false,
+    "supports_seed": "policy_exception_missing"
+  }
+]
