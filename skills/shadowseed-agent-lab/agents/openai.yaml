@@ -1,0 +1,4 @@
+interface:
+  display_name: Shadowseed Agent Lab
+  short_description: Review agent-lab PRs against SSL boundaries.
+  brand_color: '#4B7F52'
