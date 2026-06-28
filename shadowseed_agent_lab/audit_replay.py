@@ -1,9 +1,20 @@
-"""Audit replay helpers for agent-lab session decisions."""
+"""Audit replay helpers for agent-lab session decisions.
+
+The lab keeps a detailed, lab-specific identity check (decision/seed/gate
+matching) here, but the core "no weightless influence" invariant is enforced by
+the upstream `shadowseed_agent` audit policy so the safety rule has a single
+owner.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Iterable
+
+from shadowseed_agent.audit_policy import (
+    AgentInfluenceRecord,
+    assert_no_weightless_influence,
+)
 
 from shadowseed_agent_lab.session_runner import SessionDecision, SessionResult
 
@@ -33,6 +44,38 @@ def replay_sessions(results: Iterable[SessionResult]) -> AuditReport:
     for result in results:
         findings.extend(replay_session(result).findings)
     return AuditReport(ok=all(finding.ok for finding in findings), findings=tuple(findings))
+
+
+def to_influence_records(result: SessionResult) -> list[AgentInfluenceRecord]:
+    """Convert lab session decisions into upstream influence records."""
+
+    seed = result.seed_after_gate
+    return [
+        AgentInfluenceRecord(
+            seed_id=decision.seed_id,
+            action=decision.action,
+            seed_weight=seed.weight,
+            seed_status=seed.status,
+            allowed=decision.allowed,
+            reason=decision.reason,
+            gate_event_ref=decision.gate_event_ref,
+        )
+        for decision in result.decisions
+    ]
+
+
+def assert_no_weightless_influence_in_sessions(results: Iterable[SessionResult]) -> None:
+    """Fail (via upstream policy) if any session allowed weightless influence.
+
+    This delegates the hard safety invariant to the upstream
+    `assert_no_weightless_influence`, raising `WeightlessInfluenceError` on a
+    violation.
+    """
+
+    records: list[AgentInfluenceRecord] = []
+    for result in results:
+        records.extend(to_influence_records(result))
+    assert_no_weightless_influence(records)
 
 
 def _check_decision(index: int, decision: SessionDecision, result: SessionResult) -> AuditFinding:
