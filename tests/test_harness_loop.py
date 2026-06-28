@@ -108,6 +108,23 @@ class HarnessLoopTests(unittest.TestCase):
         self.assertEqual(result.iterations, 5)
         self.assertTrue(result.safe)
 
+    def test_batch_duplicates_and_aliases_are_deduped(self) -> None:
+        adapter = FixtureEvidenceAdapter([_verified("owner_missing")])
+        # One batch returns the same seed three ways: exact duplicate and an
+        # alias that normalizes to the same id.
+        harness = AgentLabHarness(
+            ScriptedProposer(["owner_missing", "owner_missing", "owner-missing"]),
+            adapter,
+            max_iterations=100,
+        )
+
+        result = harness.run_loop([Turn("doc", "no owner")])
+
+        self.assertEqual(len(result.sessions), 1)
+        self.assertEqual(result.iterations, 1)
+        self.assertEqual(len(result.probe_suggestions), 1)
+        self.assertEqual(result.promoted_seed_ids, frozenset({"owner_missing"}))
+
     def test_marker_proposer_only_proposes_absent_markers(self) -> None:
         proposer = MarkerSeedProposer.from_mapping(
             {"owner_missing": ["owner:"], "deadline_missing": ["deadline:"]}

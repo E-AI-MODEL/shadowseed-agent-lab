@@ -175,6 +175,12 @@ class AgentLabHarness:
                 for candidate in new:
                     if iterations >= self._max_iterations:
                         break
+                    # Skip within-batch duplicates and aliases (e.g. "owner_missing"
+                    # and "owner-missing") that normalize to a seed already handled
+                    # this pass, so memory/dedup holds and the iteration budget is
+                    # not spent on repeated work.
+                    if normalize_seed_id(candidate) in known:
+                        continue
                     iterations += 1
                     result = self._runner.run(
                         SessionRequest(turn.input_id, turn.input_text, candidate)
