@@ -75,6 +75,24 @@ Swap `MarkerSeedProposer` for an LLM-backed `SeedProposer` and the fixture
 adapter for a real retriever to wire the same gate-guarded loop into a live
 agent or RAG stack.
 
+## Visual explainer
+
+A visual, non-code walkthrough of how SSL and this agent lab fit together — the
+"absence as a testable object", RAG-vs-SSL, the safe application flow, and the
+fork that keeps agent use safe — is available as a standalone HTML page:
+
+- [`docs/visual-explainer.html`](docs/visual-explainer.html)
+
+GitHub shows this file as source rather than rendering it, so to view it as a
+page use one of:
+
+- **Rendered in the browser** (no setup): open it via the htmlpreview proxy —
+  [view rendered](https://htmlpreview.github.io/?https://github.com/E-AI-MODEL/shadowseed-agent-lab/blob/main/docs/visual-explainer.html);
+- **Locally**: download the file and open it in any browser, or from a clone run
+  `python -m http.server` in `docs/` and visit `visual-explainer.html`.
+
+The HTML is the front door; the docs under `docs/` remain the reference trail.
+
 ## Reader path
 
 For a first pass, read in this order:
