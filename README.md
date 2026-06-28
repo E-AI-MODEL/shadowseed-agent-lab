@@ -29,6 +29,29 @@ v0.1.0-ssl-agent-lab-foundation
 
 No release tag is created by this README update.
 
+## Reader path
+
+For a first pass, read in this order:
+
+1. Safety boundary.
+2. Upstream contract.
+3. [`docs/golden-path.md`](docs/golden-path.md).
+4. [`docs/pr-safety-checklist.md`](docs/pr-safety-checklist.md).
+5. Runtime modules:
+   - `shadowseed_agent_lab/evidence_adapter.py`
+   - `shadowseed_agent_lab/session_runner.py`
+   - `shadowseed_agent_lab/audit_replay.py`
+6. Main tests:
+   - `tests/test_evidence_adapter.py`
+   - `tests/test_session_runner.py`
+   - `tests/test_audit_replay.py`
+
+Mental model:
+
+```text
+input/context -> candidate evidence -> gate check -> suggestion-only probe -> audit replay
+```
+
 ## Safety boundary
 
 - A seed with `weight <= 0` must not trigger retrieval.
