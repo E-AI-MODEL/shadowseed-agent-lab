@@ -8,7 +8,6 @@
     :root {
       --bg: #0f172a;
       --panel: rgba(17, 24, 39, 0.84);
-      --panel2: rgba(30, 41, 59, 0.74);
       --line: rgba(226, 232, 240, 0.16);
       --ink: #e5e7eb;
       --muted: #a7b0c0;
@@ -16,7 +15,6 @@
       --blue: #93c5fd;
       --amber: #fcd34d;
       --red: #fca5a5;
-      --purple: #c4b5fd;
       --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
     }
     * { box-sizing: border-box; }
@@ -46,7 +44,6 @@
       padding: 28px;
       backdrop-filter: blur(12px);
     }
-    .flat { background: rgba(255, 255, 255, 0.045); box-shadow: none; }
     .section { margin-top: 24px; }
     .eyebrow { color: var(--green); text-transform: uppercase; font-weight: 850; letter-spacing: 0.13em; font-size: 0.76rem; margin-bottom: 12px; }
     h1, h2, h3 { margin: 0; line-height: 1.12; letter-spacing: -0.035em; }
@@ -59,7 +56,6 @@
     .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; flex: 0 0 auto; background: var(--green); box-shadow: 0 0 0 6px rgba(125, 211, 168, 0.12); }
     .dot.blue { background: var(--blue); box-shadow: 0 0 0 6px rgba(147, 197, 253, 0.12); }
     .dot.amber { background: var(--amber); box-shadow: 0 0 0 6px rgba(252, 211, 77, 0.12); }
-    .dot.red { background: var(--red); box-shadow: 0 0 0 6px rgba(252, 165, 165, 0.12); }
     .tagline { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
     .tag { border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; background: rgba(255,255,255,0.045); color: var(--muted); font-size: 0.91rem; }
     ul.clean { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
@@ -102,7 +98,8 @@
         <div class="tagline">
           <span class="tag">4.5 technical specification</span>
           <span class="tag">4.6 canonical research direction</span>
-          <span class="tag">research pipeline</span>
+          <span class="tag">Dutch-first SSOT</span>
+          <span class="tag">English bridge layer</span>
           <span class="tag">agent-lab application</span>
         </div>
       </div>
@@ -122,7 +119,18 @@
         <div class="metric"><strong>Status</strong><span>Current evidence snapshot: what works mechanically, what is early evidence, and what remains unsettled.</span></div>
         <div class="metric"><strong>Lab</strong><span>Application layer: safe agent/RAG integration, fixtures, session runner, and audit replay.</span></div>
       </div>
-      <div class="callout"><strong>Scope:</strong> this page explains the system. It does not replace the 4.5/4.6 documents, the current-status docs, or the agent-lab golden path.</div>
+      <div class="callout"><strong>Scope:</strong> this page explains the system. It does not replace the Dutch-first 4.5/4.6 documents, the current-status docs, or the agent-lab golden path.</div>
+    </section>
+
+    <section class="section card">
+      <div class="eyebrow">Language bridge</div>
+      <h2>Dutch-first canon, English-facing explanation.</h2>
+      <div class="grid three" style="margin-top:18px">
+        <div class="metric"><strong>NL</strong><span>The precise SSL theory and repo-alignment language primarily live in Dutch in the 4.5/4.6 SSOT docs.</span></div>
+        <div class="metric"><strong>EN</strong><span>This visual is an English bridge for test-market readers, funders, reviewers, and technical partners.</span></div>
+        <div class="metric"><strong>Rule</strong><span>If wording differs, the Dutch SSOT wins; this page should be corrected, not the other way around.</span></div>
+      </div>
+      <div class="callout"><strong>Why this is not a blocker:</strong> Dutch preserves the original technical precision; English makes the idea inspectable and discussable outside the original language context.</div>
     </section>
 
     <section class="section grid two">
@@ -227,7 +235,7 @@
       <ul class="clean">
         <li>No production agent that executes external actions.</li>
         <li>No claim that SSL is fully validated across all open-ended model tasks.</li>
-        <li>No replacement of the 4.5/4.6 SSOT documents by this HTML page.</li>
+        <li>No replacement of the Dutch 4.5/4.6 SSOT documents by this English HTML page.</li>
         <li>No permission for weightless seeds to steer retrieval, answers, warnings, tools, or decisions.</li>
         <li>No claim that one demo or fixture-smoke equals scientific end validation.</li>
       </ul>
@@ -241,7 +249,7 @@
         <div class="timeline-item"><strong>20–40 sec</strong><p>Explain atomic seeds: one seed is one gap. Trace records presence; weight records influence and starts at zero.</p></div>
         <div class="timeline-item"><strong>40–65 sec</strong><p>Show the research pipeline: validation, evidence layers, contradiction handling, and payoff testing.</p></div>
         <div class="timeline-item"><strong>65–85 sec</strong><p>Show the application pipeline: agent-lab wraps SSL into input-driven evidence, gate checks, suggestion-only probes, and audit replay.</p></div>
-        <div class="timeline-item"><strong>85–90 sec</strong><p>Close honestly: promising mechanism, active evidence pipeline, not a production claim.</p></div>
+        <div class="timeline-item"><strong>85–90 sec</strong><p>Close honestly: promising mechanism, active evidence pipeline, not a production claim. For exact wording, the Dutch SSOT remains leading.</p></div>
       </div>
       <p class="note">Recommended foundation marker: <code>v0.1.0-ssl-agent-lab-foundation</code>.</p>
     </section>
