@@ -1,0 +1,33 @@
+[project]
+name = "shadowseed-agent-lab"
+version = "0.2.0"
+description = "Installable agent/RAG add-on and loop harness around Shadow Seed Learning"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  # The lab does not redefine SSL. It consumes the upstream safety contract
+  # (AgentSafetyContract, InfluenceAction, evidence_can_support_gate,
+  # assert_no_weightless_influence) directly so the boundary cannot drift.
+  "shadowseed @ git+https://github.com/E-AI-MODEL/shadowseed.git@main",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.0",
+]
+
+[project.scripts]
+shadowseed-agent-lab = "shadowseed_agent_lab.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["shadowseed_agent_lab*", "examples*"]
+
+[tool.setuptools.package-data]
+"examples.agent_lab" = ["fixtures/*.json", "fixtures/*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

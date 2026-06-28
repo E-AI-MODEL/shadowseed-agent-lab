@@ -1,9 +1,27 @@
 # Agent Lab Roadmap
 
-> Status: initial lab plan
-> Date: 2026-06-27
-> Scope: experimental agent/RAG integration boundary
-> Claim boundary: not production-ready
+> Status: packaged add-on with a working loop
+> Date: 2026-06-28
+> Scope: agent/RAG integration boundary around Shadow Seed Learning
+
+## Status
+
+Implemented and shipped as an installable package (`pip install`,
+`shadowseed-agent-lab` console script, `python -m shadowseed_agent_lab`):
+
+- Phase 0–1: scope boundary + multi-domain fixtures — **done**;
+- Phase 2: evidence adapter (RAG seam) — **done**, now using the upstream
+  evidence-discipline check;
+- Phase 3: session runner **and** a bounded multi-turn loop harness
+  (`AgentLabHarness`) with memory and fixpoint convergence — **done**;
+- Phase 4: audit replay, backed by the upstream weightless-influence check —
+  **done**.
+
+The lab imports the upstream `shadowseed_agent` safety contract instead of
+re-implementing it; `tests/test_upstream_integration.py` guards against drift.
+
+Remaining: Phase 5 (suggest-only external-action boundary) stays a hard scope
+boundary — the loop suggests, it does not execute.
 
 ## Goal
 

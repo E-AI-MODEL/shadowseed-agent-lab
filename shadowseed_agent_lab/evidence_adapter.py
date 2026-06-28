@@ -20,12 +20,15 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
-GENERATED_KINDS = {
-    "completion",
-    "generated_completion",
-    "llm_output",
-    "model_output",
-}
+from shadowseed_agent.agent_contract import (
+    GENERATED_EVIDENCE_KINDS,
+    evidence_can_support_gate,
+)
+
+# The set of generated (untrusted) evidence kinds is owned upstream. The lab
+# does not maintain its own copy; it re-exports the upstream set so a change
+# there cannot silently diverge here.
+GENERATED_KINDS = GENERATED_EVIDENCE_KINDS
 
 
 @dataclass(frozen=True)
@@ -71,9 +74,14 @@ class EvidenceRef:
         )
 
     def can_support_gate(self) -> bool:
-        """Return whether this reference is eligible for gate support."""
+        """Return whether this reference is eligible for gate support.
 
-        return self.verified and self.kind.strip().lower() not in GENERATED_KINDS
+        The eligibility rule (verified, and not generated/model output) is owned
+        by the upstream `shadowseed_agent` safety contract. The lab delegates to
+        it instead of re-implementing the check.
+        """
+
+        return evidence_can_support_gate(self)
 
 
 class FixtureEvidenceAdapter:
@@ -111,9 +119,13 @@ class FixtureEvidenceAdapter:
 
 
 def filter_verified_evidence(evidence_refs: Iterable[EvidenceRef]) -> list[EvidenceRef]:
-    """Keep only evidence that may support the Validation Gate."""
+    """Keep only evidence that may support the Validation Gate.
 
-    return [ref for ref in evidence_refs if ref.can_support_gate()]
+    Uses the upstream evidence-discipline check so generated/model output is
+    never treated as verified support.
+    """
+
+    return [ref for ref in evidence_refs if evidence_can_support_gate(ref)]
 
 
 def load_fixture_adapter(path: str | Path) -> FixtureEvidenceAdapter:

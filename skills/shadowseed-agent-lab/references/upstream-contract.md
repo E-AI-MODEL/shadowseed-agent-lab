@@ -6,6 +6,19 @@
 
 `E-AI-MODEL/shadowseed-agent-lab` is a sister repo for agent/RAG integration experiments. It should integrate around upstream SSL, not replace or reinterpret it.
 
+## How the lab consumes upstream
+
+The lab declares `shadowseed` as a package dependency and **imports** the
+upstream safety helpers rather than copying them:
+
+- `shadowseed_agent.agent_contract.AgentSafetyContract` / `InfluenceAction`;
+- `shadowseed_agent.agent_contract.evidence_can_support_gate` /
+  `GENERATED_EVIDENCE_KINDS`;
+- `shadowseed_agent.audit_policy.assert_no_weightless_influence`.
+
+`tests/test_upstream_integration.py` fails if the lab stops delegating these or
+diverges from the upstream generated-evidence set.
+
 ## Upstream-owned semantics
 
 Do not redefine these in the lab repo:

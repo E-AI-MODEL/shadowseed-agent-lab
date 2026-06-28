@@ -13,6 +13,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
+from shadowseed_agent.agent_contract import AgentSafetyContract, InfluenceAction
+
 from shadowseed_agent_lab.evidence_adapter import (
     CandidateEvidenceRequest,
     EvidenceRef,
@@ -127,11 +129,22 @@ class FixtureGatePolicy:
 
 
 class AgentSessionRunner:
-    """Small deterministic observe-to-probe runner."""
+    """Small deterministic observe-to-probe runner.
 
-    def __init__(self, evidence_lookup: EvidenceLookup, gate_policy: GatePolicy | None = None):
+    The probe-influence decision is delegated to the upstream
+    `AgentSafetyContract`, so the lab cannot accidentally allow a weightless or
+    un-promoted seed to steer behavior.
+    """
+
+    def __init__(
+        self,
+        evidence_lookup: EvidenceLookup,
+        gate_policy: GatePolicy | None = None,
+        contract: AgentSafetyContract | None = None,
+    ):
         self._evidence_lookup = evidence_lookup
         self._gate_policy = gate_policy or FixtureGatePolicy()
+        self._contract = contract or AgentSafetyContract()
 
     def run(self, request: SessionRequest) -> SessionResult:
         seed_id = _normalize(request.candidate_absence)
@@ -161,7 +174,7 @@ class AgentSessionRunner:
             status=gate_event.status_after,
         )
 
-        probe_decision = _decide_probe(seed_after_gate, gate_event)
+        probe_decision = _decide_probe(seed_after_gate, gate_event, self._contract)
         probe = None
         if probe_decision.allowed and probe_decision.gate_event_ref is not None:
             probe = ProbeSuggestion(
@@ -182,19 +195,27 @@ class AgentSessionRunner:
         )
 
 
-def _decide_probe(seed: SessionSeed, gate_event: GateEvent) -> SessionDecision:
-    if seed.weight <= 0.0:
-        return SessionDecision(seed.id, "probe", False, "weightless_seed")
-    if seed.status != PROMOTED_STATUS:
-        return SessionDecision(seed.id, "probe", False, "seed_not_promoted")
-    if not gate_event.promoted or gate_event.seed_id != seed.id:
-        return SessionDecision(seed.id, "probe", False, "missing_logged_promotion")
+def _decide_probe(
+    seed: SessionSeed,
+    gate_event: GateEvent,
+    contract: AgentSafetyContract,
+) -> SessionDecision:
+    """Decide whether a promoted seed may suggest a probe.
+
+    The gate event is the only promotion record in scope, so it is the gate log
+    the upstream contract checks against. The contract owns the rule that a seed
+    must be weighted, promoted, and have a logged promotion before it influences
+    a probe.
+    """
+
+    decision = contract.decide(seed, InfluenceAction.PROBE, gate_log=(gate_event,))
+    gate_event_ref = f"gate:{gate_event.seed_id}" if decision.allowed else None
     return SessionDecision(
-        seed.id,
-        "probe",
-        True,
-        "allowed_promoted_gate_logged",
-        gate_event_ref=f"gate:{gate_event.seed_id}",
+        seed_id=decision.seed_id,
+        action="probe",
+        allowed=decision.allowed,
+        reason=decision.reason,
+        gate_event_ref=gate_event_ref,
     )
 
 
@@ -204,6 +225,12 @@ def _evidence_supports_seed(ref: EvidenceRef, seed_id: str) -> bool:
     supported = _normalize(ref.supports_seed or "")
     ref_text = _normalize(ref.text)
     return bool((supported and supported == seed_id) or seed_id in ref_text)
+
+
+def normalize_seed_id(value: str) -> str:
+    """Public seed-id normalization shared by the runner and the loop harness."""
+
+    return _normalize(value)
 
 
 def _normalize(value: str) -> str:
