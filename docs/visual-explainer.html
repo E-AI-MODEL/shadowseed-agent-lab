@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Shadowseed Agent Lab — Visual Explainer</title>
+  <title>Shadow Seed Learning — Visual Field Paper</title>
   <style>
     :root {
       --bg: #0f172a;
-      --panel: rgba(17, 24, 39, 0.82);
-      --panel-strong: rgba(15, 23, 42, 0.94);
+      --panel: rgba(17, 24, 39, 0.84);
+      --panel2: rgba(30, 41, 59, 0.74);
       --line: rgba(226, 232, 240, 0.16);
       --ink: #e5e7eb;
       --muted: #a7b0c0;
@@ -31,12 +31,13 @@
         var(--bg);
       line-height: 1.55;
     }
-    .page { width: min(1180px, calc(100vw - 32px)); margin: 0 auto; padding: 40px 0 72px; }
+    .page { width: min(1200px, calc(100vw - 32px)); margin: 0 auto; padding: 40px 0 76px; }
     .grid { display: grid; gap: 20px; }
+    .hero { grid-template-columns: 1.25fr 0.75fr; align-items: stretch; }
     .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .six { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-    .hero { grid-template-columns: 1.25fr 0.75fr; align-items: stretch; }
     .card {
       border: 1px solid var(--line);
       border-radius: 28px;
@@ -45,14 +46,15 @@
       padding: 28px;
       backdrop-filter: blur(12px);
     }
+    .flat { background: rgba(255, 255, 255, 0.045); box-shadow: none; }
+    .section { margin-top: 24px; }
     .eyebrow { color: var(--green); text-transform: uppercase; font-weight: 850; letter-spacing: 0.13em; font-size: 0.76rem; margin-bottom: 12px; }
-    h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.035em; }
-    h1 { font-size: clamp(2.35rem, 5vw, 5rem); letter-spacing: -0.065em; }
+    h1, h2, h3 { margin: 0; line-height: 1.12; letter-spacing: -0.035em; }
+    h1 { font-size: clamp(2.4rem, 5vw, 5.2rem); letter-spacing: -0.065em; }
     h2 { font-size: clamp(1.65rem, 3vw, 2.65rem); }
     h3 { font-size: 1.08rem; }
     p { color: var(--muted); }
-    .subtitle { max-width: 790px; font-size: 1.09rem; margin: 20px 0 0; }
-    .section { margin-top: 24px; }
+    .subtitle { max-width: 820px; font-size: 1.09rem; margin: 20px 0 0; }
     .pill { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,0.045); }
     .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; flex: 0 0 auto; background: var(--green); box-shadow: 0 0 0 6px rgba(125, 211, 168, 0.12); }
     .dot.blue { background: var(--blue); box-shadow: 0 0 0 6px rgba(147, 197, 253, 0.12); }
@@ -63,8 +65,8 @@
     ul.clean { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
     ul.clean li { display: flex; gap: 10px; color: var(--muted); align-items: flex-start; }
     ul.clean li::before { content: "•"; color: var(--green); font-weight: 900; }
-    .metric { border: 1px solid var(--line); border-radius: 22px; padding: 20px; background: rgba(255,255,255,0.05); }
-    .metric strong { display: block; font-size: clamp(1.8rem, 3vw, 3.1rem); line-height: 1; color: white; letter-spacing: -0.055em; }
+    .metric { border: 1px solid var(--line); border-radius: 22px; padding: 20px; background: rgba(255,255,255,0.05); min-height: 145px; }
+    .metric strong { display: block; font-size: clamp(1.65rem, 3vw, 3rem); line-height: 1; color: white; letter-spacing: -0.055em; }
     .metric span { display: block; margin-top: 8px; color: var(--muted); }
     .callout { border: 1px solid rgba(252, 211, 77, 0.34); background: linear-gradient(180deg, rgba(252, 211, 77, 0.13), rgba(252, 211, 77, 0.05)); padding: 20px; border-radius: 22px; margin-top: 18px; color: var(--ink); }
     .step { position: relative; min-height: 132px; border: 1px solid var(--line); border-radius: 20px; padding: 16px; background: rgba(255,255,255,0.05); }
@@ -72,21 +74,19 @@
     .step:last-child::after { content: ""; }
     .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 10px; margin-bottom: 10px; color: var(--blue); background: rgba(147,197,253,0.14); font-weight: 850; }
     .branch { border: 1px solid var(--line); border-radius: 24px; padding: 22px; background: rgba(255,255,255,0.045); }
-    .branch.blocked { border-color: rgba(252, 165, 165, 0.35); }
-    .branch.promoted { border-color: rgba(125, 211, 168, 0.35); }
+    .blocked { border-color: rgba(252, 165, 165, 0.35); }
+    .promoted { border-color: rgba(125, 211, 168, 0.35); }
     .big { font-size: clamp(2rem, 4vw, 4rem); font-weight: 950; letter-spacing: -0.06em; margin: 8px 0; }
     .blocked .big { color: var(--red); }
     .promoted .big { color: var(--green); }
-    .rule { border: 1px solid var(--line); border-radius: 22px; padding: 18px; background: rgba(255,255,255,0.045); min-height: 150px; }
-    .rule .icon { width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 12px; background: rgba(252,211,77,0.13); }
     .timeline { display: grid; gap: 10px; margin-top: 18px; }
     .timeline-item { display: grid; grid-template-columns: 180px 1fr; gap: 18px; border: 1px solid var(--line); border-radius: 20px; padding: 16px; background: rgba(255,255,255,0.04); }
     .timeline-item strong { color: white; }
     .timeline-item p { margin: 0; }
     code { color: white; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 8px; }
     .note { color: var(--muted); font-size: 0.9rem; margin-top: 14px; }
-    @media (max-width: 920px) {
-      .hero, .two, .three, .six { grid-template-columns: 1fr; }
+    @media (max-width: 980px) {
+      .hero, .two, .three, .four, .six { grid-template-columns: 1fr; }
       .step::after { content: "↓"; right: 18px; top: auto; bottom: -22px; }
       .timeline-item { grid-template-columns: 1fr; }
     }
@@ -96,82 +96,85 @@
   <main class="page">
     <section class="grid hero">
       <div class="card">
-        <div class="eyebrow">Shadow Seed Learning + Agent Lab</div>
-        <h1>From a missing detail to a safe agent suggestion.</h1>
-        <p class="subtitle">This visual explains how the SSL core and the agent lab fit together: a seed can be noticed, but it may not steer anything until evidence and a gate allow it.</p>
+        <div class="eyebrow">SSL + Agent Lab visual field paper</div>
+        <h1>What is missing can become the safest next question.</h1>
+        <p class="subtitle">Shadow Seed Learning detects small structural absences, stores them as weightless seeds, validates them through a gate, and only then lets them guide a next question, retrieval probe, falsification step, or agent suggestion.</p>
         <div class="tagline">
-          <span class="tag">SSL core semantics</span>
-          <span class="tag">Agent/RAG integration</span>
-          <span class="tag">Gate boundary</span>
-          <span class="tag">Audit replay</span>
+          <span class="tag">4.5 technical specification</span>
+          <span class="tag">4.6 canonical research direction</span>
+          <span class="tag">research pipeline</span>
+          <span class="tag">agent-lab application</span>
         </div>
       </div>
       <aside class="card grid" aria-label="Status">
-        <div class="pill"><span class="dot"></span><div><strong>Research harness</strong><br><span class="note">Foundation complete, not production-ready.</span></div></div>
-        <div class="pill"><span class="dot blue"></span><div><strong>Two-repo model</strong><br><span class="note">SSL semantics upstream; agent/RAG integration in this lab.</span></div></div>
-        <div class="pill"><span class="dot amber"></span><div><strong>Core question</strong><br><span class="note">How can agents use promoted seeds without weightless seeds steering behavior?</span></div></div>
+        <div class="pill"><span class="dot"></span><div><strong>Scientifically framed</strong><br><span class="note">Grounded in the SSL 4.5/4.6 docs and evidence-layer discipline.</span></div></div>
+        <div class="pill"><span class="dot blue"></span><div><strong>Applied in agent-lab</strong><br><span class="note">The lab shows how the research pipeline can be wrapped safely around agent/RAG behavior.</span></div></div>
+        <div class="pill"><span class="dot amber"></span><div><strong>Still honest</strong><br><span class="note">Research/prototype status; no production or general-validation claim.</span></div></div>
       </aside>
+    </section>
+
+    <section class="section card">
+      <div class="eyebrow">SSOT and source stack</div>
+      <h2>The HTML is the front door; the docs remain the source of truth.</h2>
+      <div class="grid four" style="margin-top:18px">
+        <div class="metric"><strong>4.5</strong><span>Technical specification: atomic seed, trace/weight split, active probes, and the original mechanism.</span></div>
+        <div class="metric"><strong>4.6</strong><span>Canonical research direction: same mechanism, sharper claim discipline, and evidence-layer roadmap.</span></div>
+        <div class="metric"><strong>Status</strong><span>Current evidence snapshot: what works mechanically, what is early evidence, and what remains unsettled.</span></div>
+        <div class="metric"><strong>Lab</strong><span>Application layer: safe agent/RAG integration, fixtures, session runner, and audit replay.</span></div>
+      </div>
+      <div class="callout"><strong>Scope:</strong> this page explains the system. It does not replace the 4.5/4.6 documents, the current-status docs, or the agent-lab golden path.</div>
     </section>
 
     <section class="section grid two">
       <article class="card">
         <div class="eyebrow">Repo 1: E-AI-MODEL/shadowseed</div>
-        <h2>SSL core owns meaning.</h2>
+        <h2>SSL is the research pipeline.</h2>
         <ul class="clean">
-          <li>Seed lifecycle and trace/weight separation.</li>
-          <li>Validation Gate behavior and promotion semantics.</li>
-          <li>Contradiction handling and evidence discipline.</li>
-          <li>Benchmarks, regression evidence, and reusable safety helpers.</li>
+          <li>Defines what a shadow seed is and why one seed must equal one gap.</li>
+          <li>Separates trace as presence from weight as influence.</li>
+          <li>Owns lifecycle, Validation Gate, contradiction handling, probes, and evidence layers.</li>
+          <li>Measures progress through explicit layers instead of one blended score.</li>
         </ul>
       </article>
       <article class="card">
         <div class="eyebrow">Repo 2: shadowseed-agent-lab</div>
-        <h2>Agent lab owns integration.</h2>
+        <h2>Agent lab is the application path.</h2>
         <ul class="clean">
-          <li>Fixture demos across multiple domains.</li>
-          <li>Input-driven evidence adapters.</li>
-          <li>Bounded session runner and fixture-only policy seam.</li>
-          <li>Suggestion-only probes, audit replay, and PR review workflow.</li>
+          <li>Tests how an agent/RAG layer can use SSL without letting weightless seeds steer.</li>
+          <li>Provides input-driven evidence adapters and fixture-only gate seams.</li>
+          <li>Produces suggestion-only probes rather than external execution.</li>
+          <li>Feeds reusable safety and audit lessons back toward upstream SSL when generic.</li>
         </ul>
       </article>
     </section>
 
     <section class="section card">
-      <div class="eyebrow">Upstream source alignment</div>
-      <h2>Keep the canonical SSL rules visible.</h2>
+      <div class="eyebrow">What distinguishes SSL</div>
+      <h2>It treats absence as a testable object, not as vague context.</h2>
       <div class="grid three" style="margin-top:18px">
-        <div class="metric"><strong>1 gap</strong><span>One seed must contain one small, testable structural absence.</span></div>
-        <div class="metric"><strong>0.0</strong><span>Weight starts at zero and rises only through the Validation Gate.</span></div>
-        <div class="metric"><strong>no broad proof</strong><span>The upstream repo is a research harness, not full general validation.</span></div>
+        <div class="metric"><strong>1 gap</strong><span>A seed must contain one small, specific, testable structural absence.</span></div>
+        <div class="metric"><strong>trace</strong><span>Presence and recurrence are tracked separately from influence.</span></div>
+        <div class="metric"><strong>weight</strong><span>Influence starts at 0.0 and can rise only through the Validation Gate.</span></div>
       </div>
-      <div class="callout"><strong>Plain-language version:</strong> SSL uses what appears missing as a starting point for targeted checking, not as automatic authority.</div>
+      <div class="callout"><strong>Short version:</strong> SSL does not add “more context”. It records a precise missing relation, tests it, and only then may use it to navigate.</div>
     </section>
 
     <section class="section card">
-      <div class="eyebrow">The invariant</div>
-      <h2>Presence is not influence.</h2>
-      <div class="grid two" style="margin-top:18px">
-        <div class="metric"><strong>trace &gt; 0</strong><span>The seed is present or observed. It is a candidate absence, not a trusted fact.</span></div>
-        <div class="metric"><strong>weight = 0</strong><span>The seed does not steer retrieval, answers, probes, warnings, tools, or decisions.</span></div>
-      </div>
-    </section>
-
-    <section class="section card">
-      <div class="eyebrow">The safe path</div>
-      <h2>Input to evidence to gate to audit.</h2>
+      <div class="eyebrow">Golden path</div>
+      <h2>How the safe application flow works.</h2>
       <div class="grid six" style="margin-top:24px">
         <div class="step"><span class="num">1</span><h3>Input/context</h3><p>A user message, document, ticket, note, or incident record starts the workflow.</p></div>
-        <div class="step"><span class="num">2</span><h3>Candidate absence</h3><p>The system detects one small missing structure, such as an owner or deadline.</p></div>
-        <div class="step"><span class="num">3</span><h3>Weightless seed</h3><p>The seed is recorded with trace, but starts with no steering power.</p></div>
-        <div class="step"><span class="num">4</span><h3>Evidence lookup</h3><p>Lookup is driven by input/context, not by the seed steering retrieval.</p></div>
-        <div class="step"><span class="num">5</span><h3>Gate check</h3><p>Verified evidence is evaluated by a gate-policy seam.</p></div>
-        <div class="step"><span class="num">6</span><h3>Audit replay</h3><p>Every allowed decision must be replayable and tied to the same seed and gate.</p></div>
+        <div class="step"><span class="num">2</span><h3>Candidate absence</h3><p>The system detects one small missing structure, such as an owner, deadline, source, or constraint.</p></div>
+        <div class="step"><span class="num">3</span><h3>Weightless seed</h3><p>The seed is recorded with trace. It has no steering power.</p></div>
+        <div class="step"><span class="num">4</span><h3>Evidence</h3><p>Evidence lookup is driven by input/context, not by the seed itself.</p></div>
+        <div class="step"><span class="num">5</span><h3>Gate</h3><p>The gate checks evidence and contradiction before promotion.</p></div>
+        <div class="step"><span class="num">6</span><h3>Audit</h3><p>Allowed decisions must replay to the same seed and gate reference.</p></div>
       </div>
     </section>
 
     <section class="section card">
       <div class="eyebrow">Gate outcome</div>
-      <h2>The fork that keeps agents safe.</h2>
+      <h2>The fork that keeps agent use safe.</h2>
       <div class="grid two" style="margin-top:18px">
         <article class="branch blocked">
           <h3>Blocked path</h3>
@@ -180,7 +183,7 @@
             <li>No retrieval steering from a weightless seed.</li>
             <li>No answer-text change.</li>
             <li>No warning, probe, tool call, or downstream behavior.</li>
-            <li>Decision is still logged for audit.</li>
+            <li>The decision is still logged for audit.</li>
           </ul>
         </article>
         <article class="branch promoted">
@@ -190,54 +193,57 @@
             <li>Seed has weight greater than zero.</li>
             <li>Seed status is promoted.</li>
             <li>Gate event is logged and matches the seed.</li>
-            <li>Only a bounded suggestion-only probe is allowed in this lab.</li>
+            <li>The lab allows bounded suggestion-only probes.</li>
           </ul>
         </article>
       </div>
     </section>
 
     <section class="section card">
-      <div class="eyebrow">Evidence status</div>
-      <h2>What the test market should hear.</h2>
+      <div class="eyebrow">Evidence and scientific posture</div>
+      <h2>What the research pipeline currently supports.</h2>
       <div class="grid three" style="margin-top:18px">
-        <div class="rule"><div class="icon">A</div><h3>Mechanics</h3><p>The upstream repo has a reproducible mechanical core and regression layer.</p></div>
-        <div class="rule"><div class="icon">C–E</div><h3>Early evidence</h3><p>Open-set quality, adversarial Gate, and probe utility are active evidence layers, not final proof.</p></div>
-        <div class="rule"><div class="icon">F</div><h3>Not yet broad</h3><p>Domain transfer and general open-ended validation are not claimed as complete.</p></div>
+        <div class="metric"><strong>Strong</strong><span>Mechanical regression layer: seed mechanics, trace/weight, gate paths, and repeatable harness behavior.</span></div>
+        <div class="metric"><strong>Active</strong><span>Open-set quality, adversarial Gate behavior, probe utility, payoff, and cross-turn evidence are being measured in layers.</span></div>
+        <div class="metric"><strong>Not final</strong><span>Broad general validation, full domain transfer, model-internal validation, and production readiness are not claimed.</span></div>
+      </div>
+      <div class="callout"><strong>Why this matters:</strong> the project distinguishes mechanism, evidence, application, and remaining research gaps instead of collapsing everything into a single marketing claim.</div>
+    </section>
+
+    <section class="section card">
+      <div class="eyebrow">How it should be used</div>
+      <h2>Four practical use modes.</h2>
+      <div class="grid four" style="margin-top:18px">
+        <div class="metric"><strong>Explain</strong><span>Use this page to explain SSL to a tester, funder, reviewer, or technical reader.</span></div>
+        <div class="metric"><strong>Inspect</strong><span>Follow the reader path into 4.5, 4.6, current status, golden path, and tests.</span></div>
+        <div class="metric"><strong>Apply</strong><span>Use agent-lab for safe agent/RAG workflows where suggestions remain bounded and auditable.</span></div>
+        <div class="metric"><strong>Improve</strong><span>Feed generic safety, audit, or evidence improvements back toward upstream SSL.</span></div>
       </div>
     </section>
 
     <section class="section card">
-      <div class="eyebrow">What the lab tests</div>
-      <h2>Three guardrails for the demo.</h2>
-      <div class="grid three" style="margin-top:18px">
-        <div class="rule"><div class="icon">1</div><h3>Evidence is input-driven</h3><p>RAG can provide evidence from the input context, but it does not assign weight or promote a seed.</p></div>
-        <div class="rule"><div class="icon">2</div><h3>Weightless means blocked</h3><p>A seed with weight at zero is present only. It cannot change behavior.</p></div>
-        <div class="rule"><div class="icon">3</div><h3>Allowed means replayable</h3><p>Audit replay checks that the decision seed, session seed, gate seed, and gate reference match.</p></div>
-      </div>
-    </section>
-
-    <section class="section card">
-      <div class="eyebrow">Demo script</div>
-      <h2>A 90-second explanation.</h2>
-      <div class="timeline">
-        <div class="timeline-item"><strong>0–20 sec</strong><p>Show the two repos: upstream SSL defines the semantics; the lab tests safe agent/RAG integration around those semantics.</p></div>
-        <div class="timeline-item"><strong>20–40 sec</strong><p>Explain atomic seeds and the invariant: one seed is one gap; trace means present; weight zero means no steering.</p></div>
-        <div class="timeline-item"><strong>40–65 sec</strong><p>Walk the flow: input/context, candidate evidence, gate check, suggestion-only probe, audit replay.</p></div>
-        <div class="timeline-item"><strong>65–90 sec</strong><p>Close with the safety fork and evidence status: blocked seeds do nothing; promoted seeds can only suggest; broad validation is not claimed.</p></div>
-      </div>
-    </section>
-
-    <section class="section card">
-      <div class="eyebrow">Scope guard</div>
-      <h2>What this page does not claim.</h2>
+      <div class="eyebrow">What does not exist yet</div>
+      <h2>Make the open edges visible.</h2>
       <ul class="clean">
-        <li>It does not claim the lab is a production agent.</li>
-        <li>It does not claim live external actions are in scope.</li>
-        <li>It does not claim SSL is fully validated across all open-ended model tasks.</li>
-        <li>It does not redefine SSL lifecycle, gate meaning, promotion, contradiction handling, or evidence rules.</li>
-        <li>It is a visual explanation of the current research/prototype foundation.</li>
+        <li>No production agent that executes external actions.</li>
+        <li>No claim that SSL is fully validated across all open-ended model tasks.</li>
+        <li>No replacement of the 4.5/4.6 SSOT documents by this HTML page.</li>
+        <li>No permission for weightless seeds to steer retrieval, answers, warnings, tools, or decisions.</li>
+        <li>No claim that one demo or fixture-smoke equals scientific end validation.</li>
       </ul>
-      <p class="note">Recommended next release marker: <code>v0.1.0-ssl-agent-lab-foundation</code>.</p>
+    </section>
+
+    <section class="section card">
+      <div class="eyebrow">90-second test-market script</div>
+      <h2>How to present it.</h2>
+      <div class="timeline">
+        <div class="timeline-item"><strong>0–20 sec</strong><p>Start with the idea: models do not only produce answers; they can also notice precise structural absences.</p></div>
+        <div class="timeline-item"><strong>20–40 sec</strong><p>Explain atomic seeds: one seed is one gap. Trace records presence; weight records influence and starts at zero.</p></div>
+        <div class="timeline-item"><strong>40–65 sec</strong><p>Show the research pipeline: validation, evidence layers, contradiction handling, and payoff testing.</p></div>
+        <div class="timeline-item"><strong>65–85 sec</strong><p>Show the application pipeline: agent-lab wraps SSL into input-driven evidence, gate checks, suggestion-only probes, and audit replay.</p></div>
+        <div class="timeline-item"><strong>85–90 sec</strong><p>Close honestly: promising mechanism, active evidence pipeline, not a production claim.</p></div>
+      </div>
+      <p class="note">Recommended foundation marker: <code>v0.1.0-ssl-agent-lab-foundation</code>.</p>
     </section>
   </main>
 </body>
