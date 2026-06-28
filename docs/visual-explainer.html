@@ -7,8 +7,9 @@
   <style>
     :root {
       --bg: #0f172a;
-      --panel: #111827;
-      --panel-2: #172033;
+      --panel: rgba(17, 24, 39, 0.82);
+      --panel-strong: rgba(15, 23, 42, 0.94);
+      --line: rgba(226, 232, 240, 0.16);
       --ink: #e5e7eb;
       --muted: #a7b0c0;
       --green: #7dd3a8;
@@ -16,375 +17,104 @@
       --amber: #fcd34d;
       --red: #fca5a5;
       --purple: #c4b5fd;
-      --line: rgba(229, 231, 235, 0.16);
-      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at 10% 5%, rgba(125, 211, 168, 0.22), transparent 26rem),
-        radial-gradient(circle at 88% 12%, rgba(147, 197, 253, 0.2), transparent 24rem),
-        radial-gradient(circle at 60% 92%, rgba(196, 181, 253, 0.17), transparent 24rem),
-        var(--bg);
       color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(125, 211, 168, 0.22), transparent 28rem),
+        radial-gradient(circle at 86% 12%, rgba(147, 197, 253, 0.20), transparent 28rem),
+        radial-gradient(circle at 60% 92%, rgba(196, 181, 253, 0.16), transparent 26rem),
+        var(--bg);
       line-height: 1.55;
     }
-
-    a { color: var(--blue); }
-
-    .page {
-      width: min(1180px, calc(100vw - 32px));
-      margin: 0 auto;
-      padding: 40px 0 72px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 24px;
-      align-items: stretch;
-      margin-bottom: 24px;
-    }
-
+    .page { width: min(1180px, calc(100vw - 32px)); margin: 0 auto; padding: 40px 0 72px; }
+    .grid { display: grid; gap: 20px; }
+    .two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .six { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .hero { grid-template-columns: 1.25fr 0.75fr; align-items: stretch; }
     .card {
-      background: linear-gradient(180deg, rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.72));
       border: 1px solid var(--line);
       border-radius: 28px;
+      background: linear-gradient(180deg, var(--panel), rgba(17, 24, 39, 0.66));
       box-shadow: var(--shadow);
       padding: 28px;
       backdrop-filter: blur(12px);
     }
-
-    .eyebrow {
-      color: var(--green);
-      text-transform: uppercase;
-      font-weight: 800;
-      letter-spacing: 0.13em;
-      font-size: 0.78rem;
-      margin-bottom: 12px;
-    }
-
-    h1, h2, h3 { line-height: 1.12; margin: 0; }
-
-    h1 {
-      font-size: clamp(2.4rem, 5vw, 5rem);
-      letter-spacing: -0.06em;
-      max-width: 920px;
-    }
-
-    h2 { font-size: clamp(1.7rem, 3vw, 2.7rem); letter-spacing: -0.04em; }
-    h3 { font-size: 1.1rem; letter-spacing: -0.015em; }
-
-    .subtitle {
-      margin: 20px 0 0;
-      max-width: 780px;
-      color: var(--muted);
-      font-size: 1.08rem;
-    }
-
-    .status-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .status-pill {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 14px;
-      background: rgba(255, 255, 255, 0.045);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-top: 6px;
-      background: var(--green);
-      box-shadow: 0 0 0 6px rgba(125, 211, 168, 0.12);
-      flex: 0 0 auto;
-    }
-
+    .eyebrow { color: var(--green); text-transform: uppercase; font-weight: 850; letter-spacing: 0.13em; font-size: 0.76rem; margin-bottom: 12px; }
+    h1, h2, h3 { line-height: 1.12; margin: 0; letter-spacing: -0.035em; }
+    h1 { font-size: clamp(2.35rem, 5vw, 5rem); letter-spacing: -0.065em; }
+    h2 { font-size: clamp(1.65rem, 3vw, 2.65rem); }
+    h3 { font-size: 1.08rem; }
+    p { color: var(--muted); }
+    .subtitle { max-width: 790px; font-size: 1.09rem; margin: 20px 0 0; }
+    .section { margin-top: 24px; }
+    .pill { display: flex; gap: 12px; align-items: flex-start; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,0.045); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 6px; flex: 0 0 auto; background: var(--green); box-shadow: 0 0 0 6px rgba(125, 211, 168, 0.12); }
+    .dot.blue { background: var(--blue); box-shadow: 0 0 0 6px rgba(147, 197, 253, 0.12); }
     .dot.amber { background: var(--amber); box-shadow: 0 0 0 6px rgba(252, 211, 77, 0.12); }
     .dot.red { background: var(--red); box-shadow: 0 0 0 6px rgba(252, 165, 165, 0.12); }
-    .dot.blue { background: var(--blue); box-shadow: 0 0 0 6px rgba(147, 197, 253, 0.12); }
-
-    .section { margin-top: 24px; }
-
-    .split {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .repo-card {
-      position: relative;
-      overflow: hidden;
-      min-height: 260px;
-    }
-
-    .repo-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -20% -48% auto;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: rgba(125, 211, 168, 0.1);
-      pointer-events: none;
-    }
-
-    .repo-card.lab::after { background: rgba(147, 197, 253, 0.12); }
-
-    ul.clean {
-      list-style: none;
-      padding: 0;
-      margin: 18px 0 0;
-      display: grid;
-      gap: 10px;
-    }
-
-    ul.clean li {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      color: var(--muted);
-    }
-
-    ul.clean li::before {
-      content: "•";
-      color: var(--green);
-      font-weight: 900;
-    }
-
-    .invariant {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 18px;
-    }
-
-    .metric {
-      padding: 20px;
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      background: rgba(255,255,255,0.045);
-    }
-
-    .metric strong {
-      display: block;
-      font-size: clamp(1.8rem, 3vw, 3.2rem);
-      line-height: 1;
-      color: white;
-      letter-spacing: -0.05em;
-    }
-
-    .metric span { display: block; color: var(--muted); margin-top: 8px; }
-
-    .flow {
-      display: grid;
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .flow-row {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 10px;
-      align-items: stretch;
-    }
-
-    .step {
-      position: relative;
-      min-height: 128px;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .step::after {
-      content: "→";
-      position: absolute;
-      right: -18px;
-      top: 42%;
-      color: rgba(229, 231, 235, 0.36);
-      font-weight: 900;
-      z-index: 2;
-    }
-
+    .tagline { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .tag { border: 1px solid var(--line); border-radius: 999px; padding: 8px 12px; background: rgba(255,255,255,0.045); color: var(--muted); font-size: 0.91rem; }
+    ul.clean { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+    ul.clean li { display: flex; gap: 10px; color: var(--muted); align-items: flex-start; }
+    ul.clean li::before { content: "•"; color: var(--green); font-weight: 900; }
+    .metric { border: 1px solid var(--line); border-radius: 22px; padding: 20px; background: rgba(255,255,255,0.05); }
+    .metric strong { display: block; font-size: clamp(1.8rem, 3vw, 3.1rem); line-height: 1; color: white; letter-spacing: -0.055em; }
+    .metric span { display: block; margin-top: 8px; color: var(--muted); }
+    .callout { border: 1px solid rgba(252, 211, 77, 0.34); background: linear-gradient(180deg, rgba(252, 211, 77, 0.13), rgba(252, 211, 77, 0.05)); padding: 20px; border-radius: 22px; margin-top: 18px; color: var(--ink); }
+    .step { position: relative; min-height: 132px; border: 1px solid var(--line); border-radius: 20px; padding: 16px; background: rgba(255,255,255,0.05); }
+    .step::after { content: "→"; position: absolute; right: -18px; top: 43%; color: rgba(229,231,235,0.36); font-weight: 900; z-index: 2; }
     .step:last-child::after { content: ""; }
-
-    .step .num {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-      border-radius: 10px;
-      background: rgba(147, 197, 253, 0.14);
-      color: var(--blue);
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .step p { margin: 8px 0 0; color: var(--muted); font-size: 0.93rem; }
-
-    .branch-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .branch {
-      border-radius: 24px;
-      border: 1px solid var(--line);
-      padding: 22px;
-      background: rgba(255,255,255,0.045);
-    }
-
+    .num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 10px; margin-bottom: 10px; color: var(--blue); background: rgba(147,197,253,0.14); font-weight: 850; }
+    .branch { border: 1px solid var(--line); border-radius: 24px; padding: 22px; background: rgba(255,255,255,0.045); }
     .branch.blocked { border-color: rgba(252, 165, 165, 0.35); }
     .branch.promoted { border-color: rgba(125, 211, 168, 0.35); }
-
-    .big-word {
-      font-size: clamp(2rem, 4vw, 4rem);
-      letter-spacing: -0.06em;
-      font-weight: 900;
-      margin: 8px 0;
-    }
-
-    .blocked .big-word { color: var(--red); }
-    .promoted .big-word { color: var(--green); }
-
-    .rule-board {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 18px;
-    }
-
-    .rule {
-      border-radius: 22px;
-      background: rgba(255,255,255,0.045);
-      border: 1px solid var(--line);
-      padding: 18px;
-      min-height: 150px;
-    }
-
-    .rule .icon {
-      display: inline-flex;
-      width: 42px;
-      height: 42px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      font-size: 1.3rem;
-      background: rgba(252, 211, 77, 0.12);
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 12px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.04);
-      font-size: 0.9rem;
-    }
-
-    .mini-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      background: var(--green);
-    }
-
-    .mini-dot.blue { background: var(--blue); }
-    .mini-dot.amber { background: var(--amber); }
-    .mini-dot.red { background: var(--red); }
-    .mini-dot.purple { background: var(--purple); }
-
-    .timeline {
-      margin-top: 18px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .timeline-item {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 18px;
-      align-items: start;
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: rgba(255,255,255,0.04);
-    }
-
+    .big { font-size: clamp(2rem, 4vw, 4rem); font-weight: 950; letter-spacing: -0.06em; margin: 8px 0; }
+    .blocked .big { color: var(--red); }
+    .promoted .big { color: var(--green); }
+    .rule { border: 1px solid var(--line); border-radius: 22px; padding: 18px; background: rgba(255,255,255,0.045); min-height: 150px; }
+    .rule .icon { width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; border-radius: 16px; margin-bottom: 12px; background: rgba(252,211,77,0.13); }
+    .timeline { display: grid; gap: 10px; margin-top: 18px; }
+    .timeline-item { display: grid; grid-template-columns: 180px 1fr; gap: 18px; border: 1px solid var(--line); border-radius: 20px; padding: 16px; background: rgba(255,255,255,0.04); }
     .timeline-item strong { color: white; }
-    .timeline-item p { margin: 0; color: var(--muted); }
-
-    .callout {
-      border: 1px solid rgba(252, 211, 77, 0.34);
-      background: linear-gradient(180deg, rgba(252, 211, 77, 0.12), rgba(252, 211, 77, 0.05));
-      padding: 22px;
-      border-radius: 24px;
-      margin-top: 18px;
-    }
-
-    .footnote { color: var(--muted); font-size: 0.9rem; margin-top: 16px; }
-
+    .timeline-item p { margin: 0; }
+    code { color: white; background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 8px; }
+    .note { color: var(--muted); font-size: 0.9rem; margin-top: 14px; }
     @media (max-width: 920px) {
-      .hero, .split, .branch-grid, .invariant { grid-template-columns: 1fr; }
-      .flow-row { grid-template-columns: 1fr; }
+      .hero, .two, .three, .six { grid-template-columns: 1fr; }
       .step::after { content: "↓"; right: 18px; top: auto; bottom: -22px; }
-      .rule-board { grid-template-columns: 1fr; }
       .timeline-item { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <section class="hero">
+    <section class="grid hero">
       <div class="card">
         <div class="eyebrow">Shadow Seed Learning + Agent Lab</div>
         <h1>From a missing detail to a safe agent suggestion.</h1>
-        <p class="subtitle">
-          This visual explains how the SSL core and the agent lab fit together: a seed can be noticed, but it may not steer anything until evidence and a gate allow it.
-        </p>
-        <div class="legend" aria-label="Legend">
-          <span class="tag"><span class="mini-dot"></span>SSL core semantics</span>
-          <span class="tag"><span class="mini-dot blue"></span>Agent lab integration</span>
-          <span class="tag"><span class="mini-dot amber"></span>Gate boundary</span>
-          <span class="tag"><span class="mini-dot red"></span>Blocked influence</span>
+        <p class="subtitle">This visual explains how the SSL core and the agent lab fit together: a seed can be noticed, but it may not steer anything until evidence and a gate allow it.</p>
+        <div class="tagline">
+          <span class="tag">SSL core semantics</span>
+          <span class="tag">Agent/RAG integration</span>
+          <span class="tag">Gate boundary</span>
+          <span class="tag">Audit replay</span>
         </div>
       </div>
-      <aside class="card status-grid" aria-label="Status">
-        <div class="status-pill"><span class="dot"></span><div><strong>Research harness</strong><br><span class="muted">Foundation complete, not production-ready.</span></div></div>
-        <div class="status-pill"><span class="dot blue"></span><div><strong>Two-repo model</strong><br><span class="muted">SSL semantics upstream; agent/RAG integration in this lab.</span></div></div>
-        <div class="status-pill"><span class="dot amber"></span><div><strong>Core question</strong><br><span class="muted">How can agents use promoted seeds without weightless seeds steering behavior?</span></div></div>
+      <aside class="card grid" aria-label="Status">
+        <div class="pill"><span class="dot"></span><div><strong>Research harness</strong><br><span class="note">Foundation complete, not production-ready.</span></div></div>
+        <div class="pill"><span class="dot blue"></span><div><strong>Two-repo model</strong><br><span class="note">SSL semantics upstream; agent/RAG integration in this lab.</span></div></div>
+        <div class="pill"><span class="dot amber"></span><div><strong>Core question</strong><br><span class="note">How can agents use promoted seeds without weightless seeds steering behavior?</span></div></div>
       </aside>
     </section>
 
-    <section class="section split">
-      <article class="card repo-card">
+    <section class="section grid two">
+      <article class="card">
         <div class="eyebrow">Repo 1: E-AI-MODEL/shadowseed</div>
         <h2>SSL core owns meaning.</h2>
         <ul class="clean">
@@ -394,7 +124,7 @@
           <li>Benchmarks, regression evidence, and reusable safety helpers.</li>
         </ul>
       </article>
-      <article class="card repo-card lab">
+      <article class="card">
         <div class="eyebrow">Repo 2: shadowseed-agent-lab</div>
         <h2>Agent lab owns integration.</h2>
         <ul class="clean">
@@ -407,45 +137,45 @@
     </section>
 
     <section class="section card">
+      <div class="eyebrow">Upstream source alignment</div>
+      <h2>Keep the canonical SSL rules visible.</h2>
+      <div class="grid three" style="margin-top:18px">
+        <div class="metric"><strong>1 gap</strong><span>One seed must contain one small, testable structural absence.</span></div>
+        <div class="metric"><strong>0.0</strong><span>Weight starts at zero and rises only through the Validation Gate.</span></div>
+        <div class="metric"><strong>no broad proof</strong><span>The upstream repo is a research harness, not full general validation.</span></div>
+      </div>
+      <div class="callout"><strong>Plain-language version:</strong> SSL uses what appears missing as a starting point for targeted checking, not as automatic authority.</div>
+    </section>
+
+    <section class="section card">
       <div class="eyebrow">The invariant</div>
       <h2>Presence is not influence.</h2>
-      <div class="invariant">
-        <div class="metric">
-          <strong>trace &gt; 0</strong>
-          <span>The seed is present or observed. It is a candidate absence, not a trusted fact.</span>
-        </div>
-        <div class="metric">
-          <strong>weight = 0</strong>
-          <span>The seed does not steer retrieval, answers, probes, warnings, tools, or decisions.</span>
-        </div>
-      </div>
-      <div class="callout">
-        <strong>Plain-language version:</strong> the system may notice that something appears missing, but noticing is not permission to act on it.
+      <div class="grid two" style="margin-top:18px">
+        <div class="metric"><strong>trace &gt; 0</strong><span>The seed is present or observed. It is a candidate absence, not a trusted fact.</span></div>
+        <div class="metric"><strong>weight = 0</strong><span>The seed does not steer retrieval, answers, probes, warnings, tools, or decisions.</span></div>
       </div>
     </section>
 
     <section class="section card">
       <div class="eyebrow">The safe path</div>
       <h2>Input to evidence to gate to audit.</h2>
-      <div class="flow">
-        <div class="flow-row">
-          <div class="step"><span class="num">1</span><h3>Input/context</h3><p>A user message, document, ticket, note, or incident record starts the workflow.</p></div>
-          <div class="step"><span class="num">2</span><h3>Candidate absence</h3><p>The system detects a small missing structure, such as an owner or deadline.</p></div>
-          <div class="step"><span class="num">3</span><h3>Weightless seed</h3><p>The seed is recorded with trace, but starts with no steering power.</p></div>
-          <div class="step"><span class="num">4</span><h3>Evidence lookup</h3><p>Lookup is driven by input/context, not by the seed steering retrieval.</p></div>
-          <div class="step"><span class="num">5</span><h3>Gate check</h3><p>Verified evidence is evaluated by a gate-policy seam.</p></div>
-          <div class="step"><span class="num">6</span><h3>Audit replay</h3><p>Every allowed decision must be replayable and tied to the same seed and gate.</p></div>
-        </div>
+      <div class="grid six" style="margin-top:24px">
+        <div class="step"><span class="num">1</span><h3>Input/context</h3><p>A user message, document, ticket, note, or incident record starts the workflow.</p></div>
+        <div class="step"><span class="num">2</span><h3>Candidate absence</h3><p>The system detects one small missing structure, such as an owner or deadline.</p></div>
+        <div class="step"><span class="num">3</span><h3>Weightless seed</h3><p>The seed is recorded with trace, but starts with no steering power.</p></div>
+        <div class="step"><span class="num">4</span><h3>Evidence lookup</h3><p>Lookup is driven by input/context, not by the seed steering retrieval.</p></div>
+        <div class="step"><span class="num">5</span><h3>Gate check</h3><p>Verified evidence is evaluated by a gate-policy seam.</p></div>
+        <div class="step"><span class="num">6</span><h3>Audit replay</h3><p>Every allowed decision must be replayable and tied to the same seed and gate.</p></div>
       </div>
     </section>
 
     <section class="section card">
       <div class="eyebrow">Gate outcome</div>
       <h2>The fork that keeps agents safe.</h2>
-      <div class="branch-grid">
+      <div class="grid two" style="margin-top:18px">
         <article class="branch blocked">
           <h3>Blocked path</h3>
-          <div class="big-word">No steer</div>
+          <div class="big">No steer</div>
           <ul class="clean">
             <li>No retrieval steering from a weightless seed.</li>
             <li>No answer-text change.</li>
@@ -455,36 +185,34 @@
         </article>
         <article class="branch promoted">
           <h3>Promoted path</h3>
-          <div class="big-word">Suggest</div>
+          <div class="big">Suggest</div>
           <ul class="clean">
             <li>Seed has weight greater than zero.</li>
             <li>Seed status is promoted.</li>
             <li>Gate event is logged and matches the seed.</li>
-            <li>Only a bounded suggestion-only probe is allowed.</li>
+            <li>Only a bounded suggestion-only probe is allowed in this lab.</li>
           </ul>
         </article>
       </div>
     </section>
 
     <section class="section card">
+      <div class="eyebrow">Evidence status</div>
+      <h2>What the test market should hear.</h2>
+      <div class="grid three" style="margin-top:18px">
+        <div class="rule"><div class="icon">A</div><h3>Mechanics</h3><p>The upstream repo has a reproducible mechanical core and regression layer.</p></div>
+        <div class="rule"><div class="icon">C–E</div><h3>Early evidence</h3><p>Open-set quality, adversarial Gate, and probe utility are active evidence layers, not final proof.</p></div>
+        <div class="rule"><div class="icon">F</div><h3>Not yet broad</h3><p>Domain transfer and general open-ended validation are not claimed as complete.</p></div>
+      </div>
+    </section>
+
+    <section class="section card">
       <div class="eyebrow">What the lab tests</div>
-      <h2>Three guardrails for the test market.</h2>
-      <div class="rule-board">
-        <div class="rule">
-          <div class="icon">🔎</div>
-          <h3>Evidence is input-driven</h3>
-          <p>RAG can provide evidence from the input context, but it does not assign weight or promote a seed.</p>
-        </div>
-        <div class="rule">
-          <div class="icon">🚧</div>
-          <h3>Weightless means blocked</h3>
-          <p>A seed with weight at zero is present only. It cannot change behavior.</p>
-        </div>
-        <div class="rule">
-          <div class="icon">🧾</div>
-          <h3>Allowed means replayable</h3>
-          <p>Audit replay checks that the decision seed, session seed, gate seed, and gate reference match.</p>
-        </div>
+      <h2>Three guardrails for the demo.</h2>
+      <div class="grid three" style="margin-top:18px">
+        <div class="rule"><div class="icon">1</div><h3>Evidence is input-driven</h3><p>RAG can provide evidence from the input context, but it does not assign weight or promote a seed.</p></div>
+        <div class="rule"><div class="icon">2</div><h3>Weightless means blocked</h3><p>A seed with weight at zero is present only. It cannot change behavior.</p></div>
+        <div class="rule"><div class="icon">3</div><h3>Allowed means replayable</h3><p>Audit replay checks that the decision seed, session seed, gate seed, and gate reference match.</p></div>
       </div>
     </section>
 
@@ -493,9 +221,9 @@
       <h2>A 90-second explanation.</h2>
       <div class="timeline">
         <div class="timeline-item"><strong>0–20 sec</strong><p>Show the two repos: upstream SSL defines the semantics; the lab tests safe agent/RAG integration around those semantics.</p></div>
-        <div class="timeline-item"><strong>20–40 sec</strong><p>Explain the invariant: trace means a candidate is present, weight zero means it cannot steer.</p></div>
+        <div class="timeline-item"><strong>20–40 sec</strong><p>Explain atomic seeds and the invariant: one seed is one gap; trace means present; weight zero means no steering.</p></div>
         <div class="timeline-item"><strong>40–65 sec</strong><p>Walk the flow: input/context, candidate evidence, gate check, suggestion-only probe, audit replay.</p></div>
-        <div class="timeline-item"><strong>65–90 sec</strong><p>Close with the safety fork: blocked seeds do nothing; promoted, gate-logged seeds can only create bounded suggestions.</p></div>
+        <div class="timeline-item"><strong>65–90 sec</strong><p>Close with the safety fork and evidence status: blocked seeds do nothing; promoted seeds can only suggest; broad validation is not claimed.</p></div>
       </div>
     </section>
 
@@ -505,10 +233,11 @@
       <ul class="clean">
         <li>It does not claim the lab is a production agent.</li>
         <li>It does not claim live external actions are in scope.</li>
+        <li>It does not claim SSL is fully validated across all open-ended model tasks.</li>
         <li>It does not redefine SSL lifecycle, gate meaning, promotion, contradiction handling, or evidence rules.</li>
         <li>It is a visual explanation of the current research/prototype foundation.</li>
       </ul>
-      <p class="footnote">Recommended next release marker: <code>v0.1.0-ssl-agent-lab-foundation</code>.</p>
+      <p class="note">Recommended next release marker: <code>v0.1.0-ssl-agent-lab-foundation</code>.</p>
     </section>
   </main>
 </body>
